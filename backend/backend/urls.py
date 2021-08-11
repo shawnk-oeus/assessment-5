@@ -7,4 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('token_auth/', obtain_jwt_token),
     path('core/', include('core.urls')),
+    path('sudoku/', include('sudoku.urls')),
 ]
