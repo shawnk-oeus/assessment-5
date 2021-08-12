@@ -8,25 +8,31 @@ import GameLandingPage from './pages/GameLandingPage';
 import AppNav from './components/AppNav.js';
 import GamePage from './pages/GamePage';
 import { getLoggedInUser, login } from './api/UserApi';
+import UserStatistics from './pages/UserStatistics';
+import { getUserProfile } from './api/UserProfile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
       if (localStorage.getItem("auth-user") !== 'null') {
-        let response = await getLoggedInUser(localStorage.getItem("auth-user"));
+        let token = localStorage.getItem("auth-user");
+        let response = await getLoggedInUser(token);
         let data = await response.json();
+        let profile = await getUserProfile(data.id, token);
         if (data.username) {
           setIsLoggedIn(true);
           setUser(data);
+          setUserProfile(profile);
         }
       }
     }
     if (!user) {
       getUser();
-    }
+    } 
   }, [user])
 
   const handleLogin = async (evt) => {
@@ -41,6 +47,8 @@ function App() {
       localStorage.setItem("auth-user", `${data.token}`);
       setIsLoggedIn(true);
       setUser(data.user);
+      let profile = await getUserProfile(data.user.id, data.token);
+      setUserProfile(profile);
       return (
         <Redirect to="/" />
       )
@@ -51,6 +59,7 @@ function App() {
     localStorage.setItem("auth-user", null);
     setIsLoggedIn(false);
     setUser(null);
+    setUserProfile(null);
   }
 
   const renderLoginPage = () => {
@@ -83,6 +92,15 @@ function App() {
     )
   }
 
+  const renderUserStatistics = () => {
+      return (
+        <UserStatistics
+          user={user}
+          userProfile={userProfile}
+          />
+      )
+  }
+
   return (
     <div className="App">
       <Router>
@@ -93,6 +111,7 @@ function App() {
           <Route exact path="/signup" component={SignupPage} />
           <Route exact path="/startgame" render={renderGameLandingPage} />
           <Route exact path="/game" component={GamePage} />
+          <Route exact path="/statistics" render={renderUserStatistics} />
         </div>
       </Router>
     </div>

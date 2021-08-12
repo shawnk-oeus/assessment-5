@@ -24,7 +24,7 @@ const getSolution = async (board) => {
   });
   const data = await response.json(); 
   const solution = await data.solution.split('').map(x => parseInt(x));
-  return solution;
+  return await solution;
 }
 
 const getPuzzle = async (difficulty) => {
@@ -32,8 +32,8 @@ const getPuzzle = async (difficulty) => {
     `http://www.cs.utep.edu/cheon/ws/sudoku/new/?size=9&level=${difficulty}`);
     let data = await response.json();
     let board = await processBoard(data['squares']);
-    let solution = [];
-    // let solution = getSolution(board);
+    // let solution = [];
+    let solution = await getSolution(board);
     return await {"board" : board, "solution": solution};
 }
 

@@ -29,12 +29,15 @@ const AppNav = ({isLoggedIn, handleLogout}) => {
             }         
             { isLoggedIn && 
               <div>
-                <NavItem onClick={handleLogout}>
-                  <Link to='/'>Logout</Link>
-                </NavItem>
                 <NavItem>
                   <Link to='/startgame'>Play Game</Link>
                 </NavItem>
+                <NavItem>
+                <Link to='/statistics'>Stats</Link>
+              </NavItem>
+              <NavItem onClick={handleLogout}>
+                  <Link to='/'>Logout</Link>
+              </NavItem>
               </div>           
             }
             

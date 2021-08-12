@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { getPuzzle } from '../api/PuzzleApi.js';
 import GamePage from './GamePage.js';
@@ -25,13 +25,9 @@ const test_solution = [
 
 const GameLandingPage = ({user, isLoggedIn}) => {
   const [difficulty, setDifficulty] = useState(1);
-  const [puzzle, setPuzzle] = useState(test_puzzle);
-  const [solution, setSolution] = useState(test_solution);
+  const [puzzle, setPuzzle] = useState(null);
+  const [solution, setSolution] = useState(null);
 
-  // useEffect(() => {
-  //   setPuzzle(test_puzzle)
-  //   setSolution(test_solution);
-  // }, [puzzle])
 
   const handleChange = (evt) => {
     setDifficulty(evt.target.value)

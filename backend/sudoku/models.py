@@ -9,6 +9,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=CASCADE)
     puzzles_attempted = models.PositiveIntegerField(default=0)
     puzzles_solved = models.PositiveIntegerField(default=0)
+    hints_given = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return f"{self.user}"

@@ -1,6 +1,6 @@
 from .models import Profile, Puzzle
 from .serializers import ProfileSerializer, PuzzleSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
@@ -9,4 +9,3 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class PuzzleViewSet(viewsets.ModelViewSet):
     queryset = Puzzle.objects.all()
     serializer_class = PuzzleSerializer
-

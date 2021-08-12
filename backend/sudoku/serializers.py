@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Profile, Puzzle
+from core.serializers import *
 
 class PuzzleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,4 +10,6 @@ class PuzzleSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['user', 'puzzles_attempted', 'puzzles_solved']
+        fields = ['user', 'puzzles_attempted', 'puzzles_solved', 'hints_given']
+
+   
