@@ -4,7 +4,7 @@ import '../App.css';
 import Board from '../components/Board'
 
 
-const GamePage = ({puzzle, solution, user, newPuzzle}) => {
+const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
     const initSquares = Array(81).fill( {
                                 currentValue: null,
                                 nextNumber: 0,
@@ -66,6 +66,7 @@ const GamePage = ({puzzle, solution, user, newPuzzle}) => {
     }
     setSquares(squaresTemp);
     window.alert("Congratulations, you solved the puzzle!");
+    // add a function call here to update puzzles solved
     // add an option to play again here
     return;
   }
@@ -92,6 +93,7 @@ const GamePage = ({puzzle, solution, user, newPuzzle}) => {
       squaresTemp[i].clickable = false;
       squaresTemp[i].givenAsHint = true;
       setSquares(squaresTemp);
+      //add a function call here to update hints given
     }
     else {
       getHint();

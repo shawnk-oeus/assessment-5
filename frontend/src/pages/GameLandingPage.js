@@ -23,7 +23,7 @@ const test_solution = [
   8, 9, 2, 5, 7, 1, 6, 4, 3
 ];
 
-const GameLandingPage = ({user, isLoggedIn}) => {
+const GameLandingPage = ({user, token, userProfile, isLoggedIn}) => {
   const [difficulty, setDifficulty] = useState(1);
   const [puzzle, setPuzzle] = useState(null);
   const [solution, setSolution] = useState(null);
@@ -38,6 +38,7 @@ const GameLandingPage = ({user, isLoggedIn}) => {
     const puzzleAndSolutionFromApi = await getPuzzle(difficulty);
     setPuzzle(puzzleAndSolutionFromApi["board"]);
     setSolution(puzzleAndSolutionFromApi["solution"]);
+    // add a function call here to update puzzles attempted
   }
 
   const renderGamePage = () => {

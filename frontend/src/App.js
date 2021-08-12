@@ -15,6 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
+  const [token, setToken]= useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -27,6 +28,7 @@ function App() {
           setIsLoggedIn(true);
           setUser(data);
           setUserProfile(profile);
+          setToken(token);
         }
       }
     }
@@ -49,6 +51,7 @@ function App() {
       setUser(data.user);
       let profile = await getUserProfile(data.user.id, data.token);
       setUserProfile(profile);
+      setToken(data.token)
       return (
         <Redirect to="/" />
       )
@@ -60,6 +63,7 @@ function App() {
     setIsLoggedIn(false);
     setUser(null);
     setUserProfile(null);
+    setToken(null);
   }
 
   const renderLoginPage = () => {
@@ -88,6 +92,8 @@ function App() {
       <GameLandingPage
         isLoggedIn={isLoggedIn}
         user={user}
+        token={token}
+        userProfile={userProfile}
       />
     )
   }

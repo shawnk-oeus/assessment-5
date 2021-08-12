@@ -1,48 +1,55 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, NavItem } from 'reactstrap';
+import { Navbar, Nav, Container} from 'react-bootstrap'; 
 
 
 const AppNav = ({isLoggedIn, handleLogout}) => {
-  
-    return (
-      <div>     
-        <Navbar color="light" expand="lg">
-            <NavItem>
-              <Link to="/">
-                Home
-              </Link> 
-            </NavItem>
-            { !isLoggedIn &&
-              <div>
-                <NavItem>
-                  <Link to="/login">
-                    Login
-                  </Link> 
-                </NavItem>
-                <NavItem>
-                  <Link to="/signup">
-                    Signup
-                  </Link> 
-                </NavItem>
-              </div>
-            }         
-            { isLoggedIn && 
-              <div>
-                <NavItem>
+
+
+    return (    
+        <Navbar bg="light" expand="sm">
+          <Container>
+            <Navbar.Brand href="#home">Sudoku</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse id="justify-content-end">
+            <Nav className="me-auto">
+              <Navbar.Text>
+                <Link to="/">
+                  Home
+                </Link> 
+              </Navbar.Text>
+              { !isLoggedIn &&           
+                <Navbar.Text>
+                  <Link to="/login">Login</Link> 
+                </Navbar.Text>
+              }
+              {
+                !isLoggedIn && 
+                <Navbar.Text>
+                  <Link to="/signup">Signup</Link> 
+                </Navbar.Text>
+              }        
+              { isLoggedIn && 
+                <Navbar.Text>
                   <Link to='/startgame'>Play Game</Link>
-                </NavItem>
-                <NavItem>
-                <Link to='/statistics'>Stats</Link>
-              </NavItem>
-              <NavItem onClick={handleLogout}>
+                </Navbar.Text>
+              }
+              { isLoggedIn &&
+                <Navbar.Text>
+                   <Link to='/statistics'>Stats</Link>
+                </Navbar.Text>
+
+              }
+              { isLoggedIn &&
+                <Navbar.Text onClick={handleLogout}>
                   <Link to='/'>Logout</Link>
-              </NavItem>
-              </div>           
-            }
+                </Navbar.Text>
+              }
+              </Nav>
+            </Navbar.Collapse>         
+          </Container>
             
         </Navbar>
-      </div>
     )
 }
 
