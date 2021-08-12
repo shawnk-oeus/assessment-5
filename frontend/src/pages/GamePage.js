@@ -4,7 +4,7 @@ import '../App.css';
 import Board from '../components/Board'
 
 
-const GamePage = ({puzzle, solution}) => {
+const GamePage = ({puzzle, solution, user, newPuzzle}) => {
     const initSquares = Array(81).fill( {
                                 currentValue: null,
                                 nextNumber: 0,
@@ -97,11 +97,6 @@ const GamePage = ({puzzle, solution}) => {
       getHint();
     }
   }
-
-  const newPuzzle = () => {
-    console.log("Getting a new puzzle");
-  }
-
 
   return (
     <div>
