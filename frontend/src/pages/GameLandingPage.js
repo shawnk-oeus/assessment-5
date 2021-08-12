@@ -54,7 +54,7 @@ const GameLandingPage = ({user, isLoggedIn}) => {
 
   return (
     <div>
-      { /* puzzle === null &&
+      { puzzle === null &&
           <div>
           {
             isLoggedIn &&
@@ -80,13 +80,10 @@ const GameLandingPage = ({user, isLoggedIn}) => {
             </div>
           } 
         </div>
-        */ }
+     }
      {  puzzle !== null && isLoggedIn &&
        <div>
-          Here's where the game will render!
-          <p>
-          { renderGamePage }
-          </p>
+          { renderGamePage() }
        </div>
      }
     </div>

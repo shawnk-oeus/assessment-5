@@ -105,6 +105,8 @@ const GamePage = ({puzzle, solution}) => {
 
   return (
     <div>
+      {console.log("Puzzle:", puzzle)}
+      {console.log("Solution:", solution)}
       { puzzle !== null && solution !== null && 
         <div className="game">
           <div className="game-board">
