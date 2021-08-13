@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Redirect } from 'react-router-dom';
 import '../App.css';
 import Board from '../components/Board'
-
+import { Button } from 'react-bootstrap';
 
 const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUserProfile}) => {
     const initSquares = Array(81).fill( {
@@ -97,10 +97,11 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUs
     setSquares(squaresTemp);
   }
 
-  const getHint = () => {
+  const getHint = (counter = 0) => {
     
     const i = Math.floor(Math.random() * 81);
-    
+
+
     if (squares[i].currentValue !== solution[i]) {
       const squaresTemp = JSON.parse(JSON.stringify(squares));
       squaresTemp[i].currentValue = solution[i];
@@ -111,7 +112,12 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUs
       setSquares(squaresTemp);
     }
     else {
-      getHint();
+      if (counter <= 81) {
+        getHint(counter++);
+      } else {
+        return;
+      }
+      
     }
   }
 
@@ -127,19 +133,19 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUs
           </div>
           <div className="game-info">
             <div>
-              <button onClick={getHint}>Get a Hint</button>
+              <Button variant="success" size="sm" onClick={getHint}>Get a Hint</Button>
               <br />
               <br />
-              <button onClick={checkSolution}>Check Solution</button>
+              <Button size="sm" onClick={checkSolution}>Check Solution</Button>
               <br />
               <br />
-              <button onClick={showSolution}>Show Solution</button>
+              <Button size="sm" onClick={showSolution}>Show Solution</Button>
               <br />
               <br />
-              <button onClick={resetPuzzle}>Reset Puzzle</button>
+              <Button size="sm" variant="danger" onClick={resetPuzzle}>Reset Puzzle</Button>
               <br />
               <br />
-              <button onClick={newPuzzle}>New Puzzle</button>
+              <Button size="sm" variant="danger" onClick={newPuzzle}>New Puzzle</Button>
             </div>
           </div>
       </div>

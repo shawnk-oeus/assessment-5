@@ -74,7 +74,7 @@ const GameLandingPage = ({user, token, userProfile, isLoggedIn, saveUserProfile}
           {
             isLoggedIn &&
             <div>             
-              <h2> Let's Play A Game! </h2>
+              <h1> Let's Play A Game! </h1>
               <form onSubmit={getPuzzleAndSolution}>
                 <label>
                 Select a puzzle difficulty:
