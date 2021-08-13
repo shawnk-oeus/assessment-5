@@ -4,12 +4,13 @@ import '../App.css';
 import Board from '../components/Board'
 
 
-const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
+const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUserProfile}) => {
     const initSquares = Array(81).fill( {
                                 currentValue: null,
                                 nextNumber: 0,
                                 clickable: true,
-                                correctGuess: false,
+                                partOfPuzzle: false,
+                                correctGuess: true,
                                 givenAsHint: false,
                                 } );
 
@@ -23,10 +24,11 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
         if (puzzle[i] !== 0) {
           squaresTemp[i].currentValue = puzzle[i];
           squaresTemp[i].clickable = false;
+          squaresTemp[i].partOfPuzzle = true;
         }
       }
       setSquares(squaresTemp);
-    }, [puzzle])
+    }, [])
 
   const handleClick = (i) => {
     // if the square is part of the original puzzle, don't allow the user to click
@@ -38,7 +40,6 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
 
     squaresTemp[i].currentValue = squares[i].nextNumber === 9 ? null : squares[i].nextNumber+1;
     squaresTemp[i].nextNumber = squares[i].currentValue === 9? null: squares[i].currentValue+1;
-    squaresTemp[i].correctGuess = false;
     setSquares(squaresTemp);
   }
 
@@ -47,26 +48,39 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
     for (let i=0; i < squaresTemp.length; i++ ) {
       if (puzzle[i] === 0) {
         squaresTemp[i].currentValue = null;
+        squaresTemp[i].nextNumber = 0;
         squaresTemp[i].clickable = true;
+        squaresTemp[i].correctGuess = true;
+        squaresTemp[i].givenAsHint = false;
       }
     }
+
     setSquares(squaresTemp);
   }
 
-  const checkSolution = () => {
+  const checkSolution = () => { 
+    let correctSolution = true;
+
     for (let i=0; i < squares.length; i++) {
         if (squares[i].currentValue !== solution[i]) {
-           window.alert("Your solution is not correct."); 
-           return;
+           correctSolution = false;
+           squares[i].correctGuess = false;
         } 
     }
+    
     const squaresTemp = JSON.parse(JSON.stringify(squares));
-    for (let i=0; i<squaresTemp.length; i++) {
-      squaresTemp[i].clickable = false;
-    }
+    // for (let i=0; i<squaresTemp.length; i++) {
+    //   squaresTemp[i].clickable = false;
+    // }
     setSquares(squaresTemp);
-    window.alert("Congratulations, you solved the puzzle!");
-    // add a function call here to update puzzles solved
+    if (!correctSolution) {
+      window.alert("Your solution is not correct."); 
+    } else {
+      window.alert("Congratulations, you solved the puzzle!");
+      userProfile.puzzles_solved += 1;
+      saveUserProfile();
+    }
+ 
     // add an option to play again here
     return;
   }
@@ -92,8 +106,9 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
       squaresTemp[i].currentValue = solution[i];
       squaresTemp[i].clickable = false;
       squaresTemp[i].givenAsHint = true;
+      userProfile.hints_given += 1;
+      saveUserProfile();
       setSquares(squaresTemp);
-      //add a function call here to update hints given
     }
     else {
       getHint();
@@ -102,8 +117,6 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle}) => {
 
   return (
     <div>
-      {console.log("Puzzle:", puzzle)}
-      {console.log("Solution:", solution)}
       { puzzle !== null && solution !== null && 
         <div className="game">
           <div className="game-board">

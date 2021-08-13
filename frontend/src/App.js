@@ -9,7 +9,7 @@ import AppNav from './components/AppNav.js';
 import GamePage from './pages/GamePage';
 import { getLoggedInUser, login } from './api/UserApi';
 import UserStatistics from './pages/UserStatistics';
-import { getUserProfile } from './api/UserProfile';
+import { getUserProfile, updateUserProfile} from './api/UserProfile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,6 +66,19 @@ function App() {
     setToken(null);
   }
 
+  // updateUserProfile takes in a user id, a user object of the format
+  // {
+  //   hints_given: 10,
+  //   puzzles_attempted: 4,
+  //   puzzles_solved: 4,​
+  //   user: 2
+  // }
+  // and a user's JWT token
+
+  const saveUserProfile = async () => {
+    return await updateUserProfile(userProfile.user, userProfile, token);
+  }
+
   const renderLoginPage = () => {
     return (
       <LoginPage
@@ -94,6 +107,7 @@ function App() {
         user={user}
         token={token}
         userProfile={userProfile}
+        saveUserProfile={saveUserProfile}
       />
     )
   }

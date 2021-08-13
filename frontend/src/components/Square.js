@@ -1,8 +1,15 @@
 import React from 'react';
 import '../App.css';
 
+// props.correctGuess {background: 'red'}
+
 const Square = (props) =>  {
-    const selectedStyle = props.givenAsHint ? {color: 'red'} : !props.clickable ? {color: 'blue'} : null;
+    let selectedStyle = props.givenAsHint ? {color: 'green'} : !props.clickable ? {color: 'blue'} : null;
+    if (selectedStyle !== null && !props.correctGuess) {
+      selectedStyle.background = 'red';
+    } else if (selectedStyle === null && !props.correctGuess) {
+      selectedStyle = {background: 'red'}
+    }
 
     return (
       <button className="square" 

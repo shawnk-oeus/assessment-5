@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { getPuzzle } from '../api/PuzzleApi.js';
 import GamePage from './GamePage.js';
+import { Form, Button } from 'react-bootstrap'
 
 const test_puzzle = [
   0, 0, 5, 7, 6, 0, 2, 0, 0, 2, 0, 0,
@@ -23,7 +24,7 @@ const test_solution = [
   8, 9, 2, 5, 7, 1, 6, 4, 3
 ];
 
-const GameLandingPage = ({user, token, userProfile, isLoggedIn}) => {
+const GameLandingPage = ({user, token, userProfile, isLoggedIn, saveUserProfile}) => {
   const [difficulty, setDifficulty] = useState(1);
   const [puzzle, setPuzzle] = useState(null);
   const [solution, setSolution] = useState(null);
@@ -33,12 +34,14 @@ const GameLandingPage = ({user, token, userProfile, isLoggedIn}) => {
     setDifficulty(evt.target.value)
   }
 
+
   const getPuzzleAndSolution = async (event) => {
     event.preventDefault();
     const puzzleAndSolutionFromApi = await getPuzzle(difficulty);
     setPuzzle(puzzleAndSolutionFromApi["board"]);
     setSolution(puzzleAndSolutionFromApi["solution"]);
-    // add a function call here to update puzzles attempted
+    userProfile.puzzles_attempted += 1;
+    saveUserProfile();
   }
 
   const renderGamePage = () => {
@@ -48,6 +51,8 @@ const GameLandingPage = ({user, token, userProfile, isLoggedIn}) => {
         solution={solution}
         user={user}
         newPuzzle={newPuzzle}
+        userProfile={userProfile}
+        saveUserProfile={saveUserProfile}
         />
     );
   }
@@ -68,25 +73,28 @@ const GameLandingPage = ({user, token, userProfile, isLoggedIn}) => {
           <div>
           {
             isLoggedIn &&
-            <div>
-              Let's Play A Game!
+            <div>             
+              <h2> Let's Play A Game! </h2>
               <form onSubmit={getPuzzleAndSolution}>
-              <label>
-              Select a puzzle difficulty:
-                <select value={difficulty} onChange={handleChange}>
-                  <option value='1'>Easy</option>
-                  <option value="2">Medium</option>
-                  <option value="3">Hard</option>
-                </select>
-              </label>
+                <label>
+                Select a puzzle difficulty:
+                <br />
+                  <select value={difficulty} onChange={handleChange}>
+                    <option value='1'>Easy</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Hard</option>
+                  </select>
+                </label>
+                <br />
                 <input type="submit" value="Submit" />
-            </form>
-            </div>
+              </form>
+          </div>
+
           }
           {
             !isLoggedIn &&
             <div>
-              Login to play a game!
+              <Redirect to='/login'/>
             </div>
           } 
         </div>

@@ -10,6 +10,7 @@ const Board = (props) => {
             value={props.squares[i].currentValue}
             clickable={props.squares[i].clickable}
             givenAsHint={props.squares[i].givenAsHint}
+            correctGuess={props.squares[i].correctGuess}
             onClick={() => props.onClick(i)}
             />
     );
