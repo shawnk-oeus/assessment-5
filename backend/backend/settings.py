@@ -70,7 +70,8 @@ CORS_ORIGIN_WHITELIST = ['https://localhost:3000','http://localhost:3000']
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'backend.utils.my_jwt_response_handler',
-
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
     # # how long the original token is valid for
     # 'JWT_EXPIRATION_DELTA': timedelta(days=2),
 

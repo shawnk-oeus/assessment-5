@@ -10,12 +10,26 @@ import GamePage from './pages/GamePage';
 import { getLoggedInUser, login } from './api/UserApi';
 import UserStatistics from './pages/UserStatistics';
 import { getUserProfile, updateUserProfile} from './api/UserProfile';
+import UserContext from './context/UserContext'
+import GameContext from './context/GameContext';
 
 function App() {
+  const initSquares = Array(81).fill( {
+    currentValue: null,
+    nextNumber: 0,
+    clickable: true,
+    partOfPuzzle: false,
+    correctGuess: true,
+    givenAsHint: false,
+    } );
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [token, setToken]= useState(null);
+  const [puzzle, setPuzzle] = useState(null);
+  const [solution, setSolution] = useState(null);
+  const [squares, setSquares] = useState(initSquares);
 
   useEffect(() => {
     const getUser = async () => {
@@ -82,58 +96,38 @@ function App() {
   const renderLoginPage = () => {
     return (
       <LoginPage
-        isLoggedIn={isLoggedIn}
         handleLogin={handleLogin}
-        handleLogout={handleLogout}
-        user={user}
       />
     )
   }
 
-  const renderHomePage = () => {
-    return (
-      <HomePage
-        isLoggedIn={isLoggedIn}
-        user={user}
-        handleLogout={handleLogout}
-      />
-    )
-  }
 
   const renderGameLandingPage = () => {
     return (
       <GameLandingPage
-        isLoggedIn={isLoggedIn}
-        user={user}
-        token={token}
-        userProfile={userProfile}
         saveUserProfile={saveUserProfile}
       />
     )
   }
 
-  const renderUserStatistics = () => {
-      return (
-        <UserStatistics
-          user={user}
-          userProfile={userProfile}
-          />
-      )
-  }
-
   return (
     <div className="App">
-      <Router>
-        <div>
-          <AppNav handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
-          <Route exact path="/" render={renderHomePage} />
-          <Route exact path="/login" render={renderLoginPage} />
-          <Route exact path="/signup" component={SignupPage} />
-          <Route exact path="/startgame" render={renderGameLandingPage} />
-          <Route exact path="/game" component={GamePage} />
-          <Route exact path="/statistics" render={renderUserStatistics} />
-        </div>
-      </Router>
+        <Router>
+          <div>
+            <UserContext.Provider value={{user: user, token: token, userProfile: userProfile, isLoggedIn:isLoggedIn, setUserProfile: setUserProfile}}>
+            <GameContext.Provider value={{puzzle: puzzle, setPuzzle: setPuzzle, solution: solution, setSolution: setSolution, squares: squares, setSquares: setSquares}}>
+              <AppNav handleLogout={handleLogout} />
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/login" render={renderLoginPage} />
+              <Route exact path="/signup" component={SignupPage} />
+              <Route exact path="/startgame" render={renderGameLandingPage} />
+              <Route exact path="/game" component={GamePage} />
+              <Route exact path="/statistics" component={UserStatistics} />
+            </GameContext.Provider>
+            </UserContext.Provider>
+            
+          </div>
+        </Router>
     </div>
   );
 }

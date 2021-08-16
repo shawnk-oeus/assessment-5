@@ -1,24 +1,26 @@
-import React from 'react';
-import { Redirect } from 'react-router';
+import React, { useContext } from 'react';
+import UserContext from "../context/UserContext"
 
-const HomePage = ({ user }) => {
+
+const HomePage = () => {
+  const userContext = useContext(UserContext);
 
   return (
     <div>
       {
-        user &&
+        userContext.user &&
         <div>
-          Welcome {user.username}
+          Welcome {userContext.user.first_name}
         </div>
       }
       {
-        !user &&
+        !userContext.user &&
         <div>
           <h1>Login to play a game!</h1>
         </div>
-      }
-    </div>
-  );
+      }     
+   </div>
+  ) 
 };
 
 export default HomePage;

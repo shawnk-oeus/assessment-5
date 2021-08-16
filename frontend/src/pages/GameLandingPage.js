@@ -1,38 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { getPuzzle } from '../api/PuzzleApi.js';
 import GamePage from './GamePage.js';
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Container } from 'react-bootstrap';
+import UserContext from '../context/UserContext.js';
+import GameContext from '../context/GameContext.js';
 
-const test_puzzle = [
-  0, 0, 5, 7, 6, 0, 2, 0, 0, 2, 0, 0,
-  0, 0, 0, 7, 0, 8, 0, 7, 0, 0, 8, 0,
-  0, 3, 0, 0, 0, 8, 4, 0, 6, 0, 7, 0,
-  7, 4, 0, 0, 0, 5, 0, 8, 6, 1, 0, 6,
-  8, 0, 7, 0, 0, 5, 0, 6, 1, 0, 4, 0,
-  0, 2, 0, 4, 3, 0, 6, 0, 9, 8, 0, 1,
-  0, 9, 2, 5, 7, 0, 6, 4, 0
-];
+const GameLandingPage = ({ saveUserProfile }) => {
+  // const initSquares = Array(81).fill( {
+  //   currentValue: null,
+  //   nextNumber: 0,
+  //   clickable: true,
+  //   partOfPuzzle: false,
+  //   correctGuess: true,
+  //   givenAsHint: false,
+  //   } );
+  
+  
+  // const [puzzle, setPuzzle] = useState(null);
+  // const [solution, setSolution] = useState(null);
+  // const [squares, setSquares] = useState(initSquares);
 
-const test_solution = [
-  3, 8, 5, 7, 6, 4, 2, 1, 9, 2, 1, 4,
-  9, 5, 3, 7, 6, 8, 6, 7, 9, 1, 8, 2,
-  5, 3, 4, 9, 5, 8, 4, 1, 6, 3, 7, 2,
-  7, 4, 3, 2, 9, 5, 1, 8, 6, 1, 2, 6,
-  8, 3, 7, 4, 9, 5, 5, 6, 1, 3, 4, 8,
-  9, 2, 7, 4, 3, 7, 6, 2, 9, 8, 5, 1,
-  8, 9, 2, 5, 7, 1, 6, 4, 3
-];
-
-const GameLandingPage = ({user, token, userProfile, isLoggedIn, saveUserProfile}) => {
   const [difficulty, setDifficulty] = useState(1);
-  const [puzzle, setPuzzle] = useState(null);
-  const [solution, setSolution] = useState(null);
-
+  const userContext = useContext(UserContext);
+  const {puzzle, squares, setPuzzle, setSquares, setSolution} = useContext(GameContext);
 
   const handleChange = (evt) => {
     setDifficulty(evt.target.value)
   }
+  
+  useEffect(() => {
+    if (puzzle !== null) {
+      const squaresTemp = JSON.parse(JSON.stringify(squares));
+
+      for (let i=0; i < squaresTemp.length; i++ ) {
+        if (puzzle[i] !== 0) {
+          squaresTemp[i].currentValue = puzzle[i];
+          squaresTemp[i].clickable = false;
+          squaresTemp[i].partOfPuzzle = true;
+        }
+      }
+      setSquares(squaresTemp);
+    }
+
+  }, [puzzle])
 
 
   const getPuzzleAndSolution = async (event) => {
@@ -40,18 +51,16 @@ const GameLandingPage = ({user, token, userProfile, isLoggedIn, saveUserProfile}
     const puzzleAndSolutionFromApi = await getPuzzle(difficulty);
     setPuzzle(puzzleAndSolutionFromApi["board"]);
     setSolution(puzzleAndSolutionFromApi["solution"]);
-    userProfile.puzzles_attempted += 1;
+    const userProfileCopy = JSON.parse(JSON.stringify(userContext.userProfile))
+    userProfileCopy.puzzles_attempted += 1;
+    userContext.setUserProfile(userProfileCopy);
     saveUserProfile();
   }
 
   const renderGamePage = () => {
     return (
       <GamePage
-        puzzle={puzzle}
-        solution={solution}
-        user={user}
         newPuzzle={newPuzzle}
-        userProfile={userProfile}
         saveUserProfile={saveUserProfile}
         />
     );
@@ -72,34 +81,32 @@ const GameLandingPage = ({user, token, userProfile, isLoggedIn, saveUserProfile}
       { puzzle === null &&
           <div>
           {
-            isLoggedIn &&
-            <div>             
-              <h1> Let's Play A Game! </h1>
-              <form onSubmit={getPuzzleAndSolution}>
-                <label>
-                Select a puzzle difficulty:
-                <br />
-                  <select value={difficulty} onChange={handleChange}>
-                    <option value='1'>Easy</option>
-                    <option value="2">Medium</option>
-                    <option value="3">Hard</option>
-                  </select>
-                </label>
-                <br />
-                <input type="submit" value="Submit" />
-              </form>
-          </div>
+            userContext.isLoggedIn &&
+            <Container>             
+            <Form onSubmit={getPuzzleAndSolution}>
+              <Form.Label>
+              Select a puzzle difficulty:
+              </Form.Label>
+              <Form.Control as="select" aria-label="Select difficulty" 
+              value={difficulty} onChange={handleChange}>
+                <option value='1'>Easy</option>
+                <option value="2">Medium</option>
+                <option value="3">Hard</option>
+              </Form.Control>    
+              <Button variant='primary' type='submit'>Submit</Button>
+            </Form>
+          </Container>
 
           }
           {
-            !isLoggedIn &&
+            !userContext.isLoggedIn &&
             <div>
               <Redirect to='/login'/>
             </div>
           } 
         </div>
      }
-     {  puzzle !== null && isLoggedIn &&
+     {  puzzle !== null && userContext.isLoggedIn &&
        <div>
           { renderGamePage() }
        </div>

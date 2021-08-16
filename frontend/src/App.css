@@ -37,7 +37,14 @@
   }
 }
 
+.container {
+  width: 35%;
+  padding: 3 rem;
+}
 
+#gameContainer {
+  width: 50%;
+}
 
 .navbar-text {
   padding-right: 1rem;
@@ -48,6 +55,7 @@
   float: left;
   padding: 16px;
 }
+
 
 body {
   font: 14px "Century Gothic", Futura, sans-serif;

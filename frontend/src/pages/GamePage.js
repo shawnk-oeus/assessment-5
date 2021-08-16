@@ -1,34 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Redirect } from 'react-router-dom';
 import '../App.css';
 import Board from '../components/Board'
-import { Button } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
+import UserContext from '../context/UserContext';
+import GameContext from '../context/GameContext';
 
-const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUserProfile}) => {
-    const initSquares = Array(81).fill( {
-                                currentValue: null,
-                                nextNumber: 0,
-                                clickable: true,
-                                partOfPuzzle: false,
-                                correctGuess: true,
-                                givenAsHint: false,
-                                } );
+const GamePage = ({ newPuzzle, saveUserProfile}) => {
 
-    const [squares, setSquares] = useState(initSquares);
+    
+  const userContext = useContext(UserContext);
+  const {puzzle, solution, squares, setSquares } = useContext(GameContext);
 
-
-    useEffect(() => {
-      const squaresTemp = JSON.parse(JSON.stringify(squares));
-
-      for (let i=0; i < squaresTemp.length; i++ ) {
-        if (puzzle[i] !== 0) {
-          squaresTemp[i].currentValue = puzzle[i];
-          squaresTemp[i].clickable = false;
-          squaresTemp[i].partOfPuzzle = true;
-        }
-      }
-      setSquares(squaresTemp);
-    }, [])
 
   const handleClick = (i) => {
     // if the square is part of the original puzzle, don't allow the user to click
@@ -69,15 +52,14 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUs
     }
     
     const squaresTemp = JSON.parse(JSON.stringify(squares));
-    // for (let i=0; i<squaresTemp.length; i++) {
-    //   squaresTemp[i].clickable = false;
-    // }
     setSquares(squaresTemp);
     if (!correctSolution) {
       window.alert("Your solution is not correct."); 
     } else {
       window.alert("Congratulations, you solved the puzzle!");
-      userProfile.puzzles_solved += 1;
+      const userProfileCopy = JSON.parse(JSON.stringify(userContext.userProfile))
+      userProfileCopy.puzzles_solved += 1;
+      userContext.setUserProfile(userProfileCopy);
       saveUserProfile();
     }
  
@@ -107,7 +89,10 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUs
       squaresTemp[i].currentValue = solution[i];
       squaresTemp[i].clickable = false;
       squaresTemp[i].givenAsHint = true;
-      userProfile.hints_given += 1;
+
+      const userProfileCopy = JSON.parse(JSON.stringify(userContext.userProfile))
+      userProfileCopy.hints_given += 1;
+      userContext.setUserProfile(userProfileCopy);
       saveUserProfile();
       setSquares(squaresTemp);
     }
@@ -124,31 +109,34 @@ const GamePage = ({puzzle, solution, user, token, newPuzzle, userProfile, saveUs
   return (
     <div>
       { puzzle !== null && solution !== null && 
-        <div className="game">
-          <div className="game-board">
-            <Board
-              squares={squares}
-              onClick={(i) => handleClick(i)}
-              />
-          </div>
-          <div className="game-info">
-            <div>
-              <Button variant="success" size="sm" onClick={getHint}>Get a Hint</Button>
-              <br />
-              <br />
-              <Button size="sm" onClick={checkSolution}>Check Solution</Button>
-              <br />
-              <br />
-              <Button size="sm" onClick={showSolution}>Show Solution</Button>
-              <br />
-              <br />
-              <Button size="sm" variant="danger" onClick={resetPuzzle}>Reset Puzzle</Button>
-              <br />
-              <br />
-              <Button size="sm" variant="danger" onClick={newPuzzle}>New Puzzle</Button>
+        <Container id="gameContainer">
+          <div className="game">
+            <div className="game-board">
+              <Board
+                squares={squares}
+                onClick={(i) => handleClick(i)}
+                />
+            </div>
+            <div className="game-info">
+              <div>
+                <Button variant="success" size="sm" onClick={getHint}>Get a Hint</Button>
+                <br />
+                <br />
+                <Button size="sm" onClick={checkSolution}>Check Solution</Button>
+                <br />
+                <br />
+                <Button size="sm" onClick={showSolution}>Show Solution</Button>
+                <br />
+                <br />
+                <Button size="sm" variant="danger" onClick={resetPuzzle}>Reset Puzzle</Button>
+                <br />
+                <br />
+                <Button size="sm" variant="danger" onClick={newPuzzle}>New Puzzle</Button>
+              </div>
             </div>
           </div>
-      </div>
+        </Container>
+        
       }
       {
         puzzle === null &&

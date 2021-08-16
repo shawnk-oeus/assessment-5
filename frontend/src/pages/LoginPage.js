@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Container } from 'react-bootstrap'
+import UserContext from '../context/UserContext';
 
-const Login = ({isLoggedIn, handleLogout, handleLogin}) => {
+const Login = ({handleLogin}) => {
 
-  if (isLoggedIn) {
+  const userContext = useContext(UserContext);
+
+  if (userContext.isLoggedIn) {
     return (<div>
        <Redirect to="/" />
     </div>)
   }
 
   return (
-    <div>
+    <Container>
       <Form onSubmit={handleLogin}>
         <Form.Group className="mb-3" >
           <Form.Label>Username</Form.Label>
@@ -26,7 +29,7 @@ const Login = ({isLoggedIn, handleLogout, handleLogin}) => {
           Submit
         </Button>
       </Form>
-    </div>
+    </Container>
   );
 };
 
