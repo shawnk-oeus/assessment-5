@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { BrowserRouter as Redirect } from 'react-router-dom';
 import '../App.css';
 import Board from '../components/Board'
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, Col } from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 import GameContext from '../context/GameContext';
 
@@ -109,15 +109,15 @@ const GamePage = ({ newPuzzle, saveUserProfile}) => {
   return (
     <div>
       { puzzle !== null && solution !== null && 
-        <Container id="gameContainer">
+        <Container>
           <div className="game">
-            <div className="game-board">
+            <Col md="auto" className="game-board">
               <Board
                 squares={squares}
                 onClick={(i) => handleClick(i)}
                 />
-            </div>
-            <div className="game-info">
+            </Col>
+            <Col md="auto" className="game-info">
               <div>
                 <Button variant="success" size="sm" onClick={getHint}>Get a Hint</Button>
                 <br />
@@ -133,7 +133,7 @@ const GamePage = ({ newPuzzle, saveUserProfile}) => {
                 <br />
                 <Button size="sm" variant="danger" onClick={newPuzzle}>New Puzzle</Button>
               </div>
-            </div>
+            </Col>
           </div>
         </Container>
         
