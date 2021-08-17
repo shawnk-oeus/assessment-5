@@ -78,6 +78,9 @@ function App() {
     setUser(null);
     setUserProfile(null);
     setToken(null);
+    setPuzzle(null);
+    setSolution(null);
+    setSquares(initSquares);
   }
 
   // updateUserProfile takes in a user id, a user object of the format
@@ -93,34 +96,17 @@ function App() {
     return await updateUserProfile(userProfile.user, userProfile, token);
   }
 
-  const renderLoginPage = () => {
-    return (
-      <LoginPage
-        handleLogin={handleLogin}
-      />
-    )
-  }
-
-
-  const renderGameLandingPage = () => {
-    return (
-      <GameLandingPage
-        saveUserProfile={saveUserProfile}
-      />
-    )
-  }
-
   return (
     <div className="App">
         <Router>
           <div>
-            <UserContext.Provider value={{user: user, token: token, userProfile: userProfile, isLoggedIn:isLoggedIn, setUserProfile: setUserProfile}}>
+            <UserContext.Provider value={{user: user, token: token, userProfile: userProfile, isLoggedIn:isLoggedIn, setUserProfile: setUserProfile, handleLogin: handleLogin, saveUserProfile: saveUserProfile}}>
             <GameContext.Provider value={{puzzle: puzzle, setPuzzle: setPuzzle, solution: solution, setSolution: setSolution, squares: squares, setSquares: setSquares}}>
               <AppNav handleLogout={handleLogout} />
               <Route exact path="/" component={HomePage} />
-              <Route exact path="/login" render={renderLoginPage} />
+              <Route exact path="/login" component={LoginPage} />
               <Route exact path="/signup" component={SignupPage} />
-              <Route exact path="/startgame" render={renderGameLandingPage} />
+              <Route exact path="/startgame" component={GameLandingPage} />
               <Route exact path="/game" component={GamePage} />
               <Route exact path="/statistics" component={UserStatistics} />
             </GameContext.Provider>

@@ -3,20 +3,22 @@ import UserContext from "../context/UserContext"
 
 
 const HomePage = () => {
-  const userContext = useContext(UserContext);
+  const {user} = useContext(UserContext);
 
   return (
     <div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Sudoku_puzzle_hard_for_brute_force.jpg" alt="Sudoku puzzle"/>
       {
-        userContext.user &&
+        user &&
         <div>
-          Welcome {userContext.user.first_name}
+          <h2>Welcome {user.first_name}</h2>
+          <p>Click above to play a game!</p>
         </div>
       }
       {
-        !userContext.user &&
+        !user &&
         <div>
-          <h1>Login to play a game!</h1>
+          <h2>Login above to play a game!</h2>
         </div>
       }     
    </div>

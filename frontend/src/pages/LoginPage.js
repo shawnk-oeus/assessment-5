@@ -3,11 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { Form, Button, Container } from 'react-bootstrap'
 import UserContext from '../context/UserContext';
 
-const Login = ({handleLogin}) => {
+const Login = () => {
 
-  const userContext = useContext(UserContext);
+  const {isLoggedIn, handleLogin} = useContext(UserContext);
 
-  if (userContext.isLoggedIn) {
+  if (isLoggedIn) {
     return (<div>
        <Redirect to="/" />
     </div>)
@@ -35,15 +35,3 @@ const Login = ({handleLogin}) => {
 
 export default Login;
 
-
-// <h1>Login Page</h1>
-//       <form onSubmit={handleLogin}>
-//         <label>User Name:</label>
-//         <input type='text' placeholder='Enter username' name='username' />
-//         <br />
-//         <label>Password:</label>
-//         <input type='password' name='password' />
-//         <br />
-//         <button type='submit' >Submit</button>
-//         <br />
-//       </form>

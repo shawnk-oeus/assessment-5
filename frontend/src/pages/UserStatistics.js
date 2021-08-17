@@ -4,26 +4,26 @@ import { ListGroup, Container } from "react-bootstrap";
 
 const UserStatistics = () => {
   
-  const userContext = useContext(UserContext);
+  const {user, userProfile} = useContext(UserContext);
 
   return (
     <div>
-      { userContext.user &&
+      { user &&
         <Container>
-          <h1>Sudoku statistics for {userContext.user.first_name} </h1>
+          <h1>Sudoku statistics for {user.first_name} </h1>
           <ListGroup>
-            <ListGroup.Item>Puzzles attempted: {userContext.userProfile.puzzles_attempted}</ListGroup.Item>
-            <ListGroup.Item>Puzzles solved: {userContext.userProfile.puzzles_solved}</ListGroup.Item>
-            <ListGroup.Item>Hints given: {userContext.userProfile.hints_given}</ListGroup.Item>
+            <ListGroup.Item>Puzzles attempted: {userProfile.puzzles_attempted}</ListGroup.Item>
+            <ListGroup.Item>Puzzles solved: {userProfile.puzzles_solved}</ListGroup.Item>
+            <ListGroup.Item>Hints given: {userProfile.hints_given}</ListGroup.Item>
           </ListGroup>
       </Container>
       }
       {
-        !userContext.user &&
+        !user &&
         <h1>Login to view your statistics!</h1>
       }
     </div>
   )
 }
 
-export default UserStatistics
+export default UserStatistics;

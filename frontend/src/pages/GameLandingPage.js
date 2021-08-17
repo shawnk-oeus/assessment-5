@@ -6,23 +6,11 @@ import { Form, Button, Container } from 'react-bootstrap';
 import UserContext from '../context/UserContext.js';
 import GameContext from '../context/GameContext.js';
 
-const GameLandingPage = ({ saveUserProfile }) => {
-  // const initSquares = Array(81).fill( {
-  //   currentValue: null,
-  //   nextNumber: 0,
-  //   clickable: true,
-  //   partOfPuzzle: false,
-  //   correctGuess: true,
-  //   givenAsHint: false,
-  //   } );
-  
-  
-  // const [puzzle, setPuzzle] = useState(null);
-  // const [solution, setSolution] = useState(null);
-  // const [squares, setSquares] = useState(initSquares);
+const GameLandingPage = () => {
 
   const [difficulty, setDifficulty] = useState(1);
-  const userContext = useContext(UserContext);
+
+  const {isLoggedIn, userProfile, setUserProfile, saveUserProfile} = useContext(UserContext);
   const {puzzle, squares, setPuzzle, setSquares, setSolution} = useContext(GameContext);
 
   const handleChange = (evt) => {
@@ -51,9 +39,9 @@ const GameLandingPage = ({ saveUserProfile }) => {
     const puzzleAndSolutionFromApi = await getPuzzle(difficulty);
     setPuzzle(puzzleAndSolutionFromApi["board"]);
     setSolution(puzzleAndSolutionFromApi["solution"]);
-    const userProfileCopy = JSON.parse(JSON.stringify(userContext.userProfile))
+    const userProfileCopy = JSON.parse(JSON.stringify(userProfile))
     userProfileCopy.puzzles_attempted += 1;
-    userContext.setUserProfile(userProfileCopy);
+    setUserProfile(userProfileCopy);
     saveUserProfile();
   }
 
@@ -61,7 +49,6 @@ const GameLandingPage = ({ saveUserProfile }) => {
     return (
       <GamePage
         newPuzzle={newPuzzle}
-        saveUserProfile={saveUserProfile}
         />
     );
   }
@@ -81,7 +68,7 @@ const GameLandingPage = ({ saveUserProfile }) => {
       { puzzle === null &&
           <div>
           {
-            userContext.isLoggedIn &&
+            isLoggedIn &&
             <Container>             
             <Form onSubmit={getPuzzleAndSolution}>
               <Form.Label>
@@ -99,14 +86,14 @@ const GameLandingPage = ({ saveUserProfile }) => {
 
           }
           {
-            !userContext.isLoggedIn &&
+            !isLoggedIn &&
             <div>
               <Redirect to='/login'/>
             </div>
           } 
         </div>
      }
-     {  puzzle !== null && userContext.isLoggedIn &&
+     {  puzzle !== null && isLoggedIn &&
        <div>
           { renderGamePage() }
        </div>

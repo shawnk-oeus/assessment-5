@@ -6,10 +6,10 @@ import { Button, Container, Col } from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 import GameContext from '../context/GameContext';
 
-const GamePage = ({ newPuzzle, saveUserProfile}) => {
+const GamePage = ({ newPuzzle}) => {
 
     
-  const userContext = useContext(UserContext);
+  const { userProfile, setUserProfile, saveUserProfile} = useContext(UserContext);
   const {puzzle, solution, squares, setSquares } = useContext(GameContext);
 
 
@@ -57,9 +57,9 @@ const GamePage = ({ newPuzzle, saveUserProfile}) => {
       window.alert("Your solution is not correct."); 
     } else {
       window.alert("Congratulations, you solved the puzzle!");
-      const userProfileCopy = JSON.parse(JSON.stringify(userContext.userProfile))
+      const userProfileCopy = JSON.parse(JSON.stringify(userProfile))
       userProfileCopy.puzzles_solved += 1;
-      userContext.setUserProfile(userProfileCopy);
+      setUserProfile(userProfileCopy);
       saveUserProfile();
     }
  
@@ -90,9 +90,9 @@ const GamePage = ({ newPuzzle, saveUserProfile}) => {
       squaresTemp[i].clickable = false;
       squaresTemp[i].givenAsHint = true;
 
-      const userProfileCopy = JSON.parse(JSON.stringify(userContext.userProfile))
+      const userProfileCopy = JSON.parse(JSON.stringify(userProfile))
       userProfileCopy.hints_given += 1;
-      userContext.setUserProfile(userProfileCopy);
+      setUserProfile(userProfileCopy);
       saveUserProfile();
       setSquares(squaresTemp);
     }

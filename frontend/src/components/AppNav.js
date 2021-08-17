@@ -4,8 +4,8 @@ import { Navbar, Nav, Container} from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 
 
-const AppNav = ({ handleLogout}) => {
-    const userContext = useContext(UserContext);
+const AppNav = () => {
+    const {isLoggedIn, handleLogout} = useContext(UserContext);
 
     return (    
        <Container>
@@ -19,29 +19,29 @@ const AppNav = ({ handleLogout}) => {
                   Home
                 </Link> 
               </Navbar.Text>
-              { !userContext.isLoggedIn &&           
+              { !isLoggedIn &&           
                 <Navbar.Text>
                   <Link to="/login">Login</Link> 
                 </Navbar.Text>
               }
               {
-                !userContext.isLoggedIn && 
+                !isLoggedIn && 
                 <Navbar.Text>
                   <Link to="/signup">Signup</Link> 
                 </Navbar.Text>
               }        
-              { userContext.isLoggedIn && 
+              { isLoggedIn && 
                 <Navbar.Text>
                   <Link to='/startgame'>Play Game</Link>
                 </Navbar.Text>
               }
-              { userContext.isLoggedIn &&
+              { isLoggedIn &&
                 <Navbar.Text>
                     <Link to='/statistics'>Stats</Link>
                 </Navbar.Text>
 
               }
-              { userContext.isLoggedIn &&
+              { isLoggedIn &&
                 <Navbar.Text onClick={handleLogout}>
                   <Link to='/'>Logout</Link>
                 </Navbar.Text>

@@ -72,8 +72,8 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'backend.utils.my_jwt_response_handler',
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
-    # # how long the original token is valid for
-    # 'JWT_EXPIRATION_DELTA': timedelta(days=2),
+    # how long the original token is valid for
+    'JWT_EXPIRATION_DELTA': timedelta(days=2),
 
     # # allow refreshing of tokens
     # 'JWT_ALLOW_REFRESH': True,
