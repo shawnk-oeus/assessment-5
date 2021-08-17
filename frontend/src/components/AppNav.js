@@ -4,8 +4,8 @@ import { Navbar, Nav, Container} from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 
 
-const AppNav = () => {
-    const {isLoggedIn, handleLogout} = useContext(UserContext);
+const AppNav = ({handleLogout}) => {
+    const {isLoggedIn} = useContext(UserContext);
 
     return (    
        <Container>

@@ -8,7 +8,7 @@ const UserStatistics = () => {
 
   return (
     <div>
-      { user &&
+      { user && userProfile &&
         <Container>
           <h1>Sudoku statistics for {user.first_name} </h1>
           <ListGroup>

@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import './App.css';
+
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import GameLandingPage from './pages/GameLandingPage';
+import UserStatistics from './pages/UserStatistics';
 import AppNav from './components/AppNav.js';
 import GamePage from './pages/GamePage';
+
 import { getLoggedInUser, login } from './api/UserApi';
-import UserStatistics from './pages/UserStatistics';
 import { getUserProfile, updateUserProfile} from './api/UserProfile';
+
 import UserContext from './context/UserContext'
 import GameContext from './context/GameContext';
 
@@ -28,6 +31,7 @@ function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [token, setToken]= useState(null);
   const [puzzle, setPuzzle] = useState(null);
+  const [puzzleSolved, setPuzzleSolved] = useState(false);
   const [solution, setSolution] = useState(null);
   const [squares, setSquares] = useState(initSquares);
 
@@ -100,6 +104,7 @@ function App() {
     setPuzzle(null);
     setSolution(null);
     setSquares(initSquares);
+    setPuzzleSolved(false);
     return (
       <div>
           <Redirect to="/startgame" />
@@ -112,7 +117,7 @@ function App() {
         <Router>
           <div>
             <UserContext.Provider value={{user: user, token: token, userProfile: userProfile, isLoggedIn:isLoggedIn, setUserProfile: setUserProfile, handleLogin: handleLogin, saveUserProfile: saveUserProfile}}>
-            <GameContext.Provider value={{puzzle: puzzle, setPuzzle: setPuzzle, solution: solution, setSolution: setSolution, squares: squares, setSquares: setSquares, newPuzzle: newPuzzle}}>
+            <GameContext.Provider value={{puzzle: puzzle, setPuzzle: setPuzzle, solution: solution, setSolution: setSolution, squares: squares, setSquares: setSquares, newPuzzle: newPuzzle, puzzleSolved: puzzleSolved, setPuzzleSolved: setPuzzleSolved}}>
               <AppNav handleLogout={handleLogout} />
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={LoginPage} />

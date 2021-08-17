@@ -10,8 +10,10 @@ const GameLandingPage = () => {
 
   const [difficulty, setDifficulty] = useState(1);
 
+
   const {isLoggedIn, userProfile, setUserProfile, saveUserProfile} = useContext(UserContext);
   const {puzzle, squares, setPuzzle, setSquares, setSolution, newPuzzle} = useContext(GameContext);
+  
 
   const handleChange = (evt) => {
     setDifficulty(evt.target.value)

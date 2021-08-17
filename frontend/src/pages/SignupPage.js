@@ -17,7 +17,7 @@ const SignupPage = (props) => {
     if (data.error) {
       console.log('there was an error signing up');
     } else {
-      history.push('/');
+      history.push('/login');
     }
 
   }

@@ -1,16 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BrowserRouter as Redirect } from 'react-router-dom';
 import '../App.css';
 import Board from '../components/Board'
-import { Button, Container, Col } from 'react-bootstrap';
+import { Button, Container, Col, Modal } from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 import GameContext from '../context/GameContext';
 
 const GamePage = () => {
+  const [show, setShow] = useState(false);
+  const [modalText, setModalText] = useState(null);
 
+  const handleClose = () => {setShow(false);}
     
   const { userProfile, setUserProfile, saveUserProfile} = useContext(UserContext);
-  const {puzzle, solution, squares, setSquares, newPuzzle } = useContext(GameContext);
+  const {puzzle, solution, squares, setSquares, newPuzzle, puzzleSolved, setPuzzleSolved } = useContext(GameContext);
 
 
   const handleClick = (i) => {
@@ -53,18 +56,25 @@ const GamePage = () => {
     
     const squaresTemp = JSON.parse(JSON.stringify(squares));
     setSquares(squaresTemp);
-    if (!correctSolution) {
-      window.alert("Your solution is not correct."); 
+    if (!correctSolution) { 
+      setModalText("Sorry, your solution is not correct");
+      setPuzzleSolved(false);
+      setShow(true);
+     
     } else {
-      window.alert("Congratulations, you solved the puzzle!");
-      const userProfileCopy = JSON.parse(JSON.stringify(userProfile))
-      userProfileCopy.puzzles_solved += 1;
-      setUserProfile(userProfileCopy);
-      saveUserProfile();
+      if (puzzleSolved === false) {
+        const userProfileCopy = JSON.parse(JSON.stringify(userProfile))
+        userProfileCopy.puzzles_solved += 1;
+        setUserProfile(userProfileCopy);
+        saveUserProfile();
+        setModalText("Congratulations, you solved the puzzle!")
+        setPuzzleSolved(true);
+        setShow(true);
+      }
+
     }
  
-    // add an option to play again here
-    return;
+    // add an option to play again 
   }
 
   const showSolution = () => {
@@ -135,6 +145,21 @@ const GamePage = () => {
               </div>
             </Col>
           </div>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Body>{ modalText }</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+               Close
+              </Button>
+              <div>
+                { puzzleSolved && 
+                  <Button variant="primary" onClick={newPuzzle}>
+                   New Puzzle
+                  </Button>
+                }    
+              </div>             
+            </Modal.Footer>
+          </Modal>
         </Container>
         
       }
