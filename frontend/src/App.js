@@ -96,12 +96,23 @@ function App() {
     return await updateUserProfile(userProfile.user, userProfile, token);
   }
 
+  const newPuzzle = () => {
+    setPuzzle(null);
+    setSolution(null);
+    setSquares(initSquares);
+    return (
+      <div>
+          <Redirect to="/startgame" />
+      </div>
+    );
+  }
+
   return (
     <div className="App">
         <Router>
           <div>
             <UserContext.Provider value={{user: user, token: token, userProfile: userProfile, isLoggedIn:isLoggedIn, setUserProfile: setUserProfile, handleLogin: handleLogin, saveUserProfile: saveUserProfile}}>
-            <GameContext.Provider value={{puzzle: puzzle, setPuzzle: setPuzzle, solution: solution, setSolution: setSolution, squares: squares, setSquares: setSquares}}>
+            <GameContext.Provider value={{puzzle: puzzle, setPuzzle: setPuzzle, solution: solution, setSolution: setSolution, squares: squares, setSquares: setSquares, newPuzzle: newPuzzle}}>
               <AppNav handleLogout={handleLogout} />
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={LoginPage} />

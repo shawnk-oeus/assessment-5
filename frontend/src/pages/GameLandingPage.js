@@ -11,7 +11,7 @@ const GameLandingPage = () => {
   const [difficulty, setDifficulty] = useState(1);
 
   const {isLoggedIn, userProfile, setUserProfile, saveUserProfile} = useContext(UserContext);
-  const {puzzle, squares, setPuzzle, setSquares, setSolution} = useContext(GameContext);
+  const {puzzle, squares, setPuzzle, setSquares, setSolution, newPuzzle} = useContext(GameContext);
 
   const handleChange = (evt) => {
     setDifficulty(evt.target.value)
@@ -36,9 +36,15 @@ const GameLandingPage = () => {
 
   const getPuzzleAndSolution = async (event) => {
     event.preventDefault();
-    const puzzleAndSolutionFromApi = await getPuzzle(difficulty);
-    setPuzzle(puzzleAndSolutionFromApi["board"]);
-    setSolution(puzzleAndSolutionFromApi["solution"]);
+    try {
+      const puzzleAndSolutionFromApi = await getPuzzle(difficulty);
+      setPuzzle(puzzleAndSolutionFromApi["board"]);
+      setSolution(puzzleAndSolutionFromApi["solution"]);
+    }
+    catch (err) {
+      console.error(err)
+    }
+    
     const userProfileCopy = JSON.parse(JSON.stringify(userProfile))
     userProfileCopy.puzzles_attempted += 1;
     setUserProfile(userProfileCopy);
@@ -53,15 +59,6 @@ const GameLandingPage = () => {
     );
   }
 
-  const newPuzzle = () => {
-    setPuzzle(null);
-    setSolution(null);
-    return (
-      <div>
-          <Redirect to="/startgame" />
-      </div>
-    );
-  }
 
   return (
     <div>

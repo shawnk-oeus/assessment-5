@@ -6,11 +6,11 @@ import { Button, Container, Col } from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 import GameContext from '../context/GameContext';
 
-const GamePage = ({ newPuzzle}) => {
+const GamePage = () => {
 
     
   const { userProfile, setUserProfile, saveUserProfile} = useContext(UserContext);
-  const {puzzle, solution, squares, setSquares } = useContext(GameContext);
+  const {puzzle, solution, squares, setSquares, newPuzzle } = useContext(GameContext);
 
 
   const handleClick = (i) => {
